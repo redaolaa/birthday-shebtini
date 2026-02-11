@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#ff6b9d">
+  <title>For Shebtini 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(160deg, #1a0a14 0%, #2d1b2e 40%, #1a0a14 100%);
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .view {
+      display: none;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 1.5rem;
+      padding-bottom: 2rem;
+      padding-top: max(1.5rem, env(safe-area-inset-top));
+      padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+    .view.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ========== VIEW 1: Click here ========== */
+    .click-here-btn {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(1.5rem, 6vw, 2.2rem);
+      font-weight: 600;
+      padding: 1.2rem 2.5rem;
+      border-radius: 2rem;
+      border: none;
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(255, 107, 157, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .click-here-btn:hover, .click-here-btn:active {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(255, 107, 157, 0.5);
+    }
+    .hint {
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    /* ========== VIEW 2: Birthday page ========== */
+    .birthday-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(1.8rem, 8vw, 3rem);
+      font-weight: 600;
+      text-align: center;
+      margin: 0 0 1.5rem;
+      background: linear-gradient(90deg, #ffb347, #ff6b9d, #c44569);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleShine 3s ease-in-out infinite, popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes titleShine {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .click-me-box {
+      display: inline-block;
+      margin: 1rem 0 1.5rem;
+      padding: 1rem 1.8rem;
+      background: linear-gradient(135deg, rgba(255, 182, 71, 0.3), rgba(255, 107, 157, 0.3));
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 1.2rem;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .click-me-box:hover, .click-me-box:active {
+      transform: scale(1.08);
+      box-shadow: 0 0 24px rgba(255, 182, 71, 0.4);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+    .thank-you-msg {
+      font-size: clamp(1.1rem, 4vw, 1.4rem);
+      text-align: center;
+      max-width: 320px;
+      line-height: 1.5;
+      margin: 0 0 1.5rem;
+      padding: 1rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .thank-you-msg.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .photo-placeholder {
+      width: 100%;
+      max-width: 280px;
+      aspect-ratio: 1;
+      margin: 1rem auto;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .photo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-placeholder span {
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+    .photo-placeholder.has-photo span { display: none; }
+    .photo-placeholder.has-photo img { display: block !important; }
+
+    /* Floating hearts on "Click me" */
+    .heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.5rem;
+      animation: floatUp 1.2s ease-out forwards;
+      z-index: 100;
+    }
+    @keyframes floatUp {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(-80px) scale(1.2); }
+    }
+    .gift-link {
+      margin-top: 1.5rem;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.2rem;
+      color: #ffb347;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 1rem;
+      background: rgba(255, 179, 71, 0.2);
+      transition: transform 0.2s, background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .gift-link:hover, .gift-link:active {
+      transform: scale(1.05);
+      background: rgba(255, 179, 71, 0.35);
+    }
+
+    /* ========== VIEW 3: Gift page ========== */
+    .gift-message {
+      font-size: clamp(1.1rem, 4.5vw, 1.35rem);
+      text-align: center;
+      max-width: 340px;
+      line-height: 1.6;
+      margin: 0;
+      animation: fadeIn 0.6s ease;
+    }
+    .gift-emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: bounce 1s ease infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- VIEW 1: Click here to open -->
+  <section id="view-start" class="view active">
+    <button type="button" class="click-here-btn" id="btn-start">Click here</button>
+    <p class="hint">Something special awaits 🎂</p>
+  </section>
+
+  <!-- VIEW 2: Birthday message -->
+  <section id="view-birthday" class="view">
+    <h1 class="birthday-title">Happy Birthday Shebtini!</h1>
+    <div class="click-me-box" id="click-me" role="button" tabindex="0">Click me</div>
+    <p class="thank-you-msg" id="thank-you-msg">Thank you for being an amazing friend</p>
+    <div class="photo-placeholder" id="photo-box">
+      <!-- To add a photo: put your image in this folder and set src below, e.g. src="photo.jpg" -->
+      <img id="birthday-photo" src="" alt="Photo for Shebtini" style="display: none;">
+      <span id="photo-placeholder-text">Add your photo here</span>
+    </div>
+    <a href="#gift" class="gift-link" id="gift-link">Click here for your gift 🎁</a>
+  </section>
+
+  <!-- VIEW 3: Gift -->
+  <section id="view-gift" class="view">
+    <div class="gift-emoji">🦴</div>
+    <p class="gift-message">
+      Since you aren't looking after your bones… I wanted to steal this opportunity and gift you this!
+    </p>
+  </section>
+
+  <script>
+    (function () {
+      var viewStart = document.getElementById('view-start');
+      var viewBirthday = document.getElementById('view-birthday');
+      var viewGift = document.getElementById('view-gift');
+      var btnStart = document.getElementById('btn-start');
+      var clickMe = document.getElementById('click-me');
+      var thankYouMsg = document.getElementById('thank-you-msg');
+      var giftLink = document.getElementById('gift-link');
+
+      function showView(view) {
+        viewStart.classList.remove('active');
+        viewBirthday.classList.remove('active');
+        viewGift.classList.remove('active');
+        view.classList.add('active');
+      }
+
+      btnStart.addEventListener('click', function () {
+        showView(viewBirthday);
+      });
+
+      function spawnHearts() {
+        var hearts = ['💖', '🌸', '✨', '💕'];
+        for (var i = 0; i < 8; i++) {
+          (function (j) {
+            setTimeout(function () {
+              var el = document.createElement('span');
+              el.className = 'heart';
+              el.textContent = hearts[j % hearts.length];
+              el.style.left = (30 + Math.random() * 40) + '%';
+              el.style.top = (40 + Math.random() * 20) + '%';
+              document.body.appendChild(el);
+              setTimeout(function () { el.remove(); }, 1300);
+            }, j * 80);
+          })(i);
+        }
+      }
+      function revealThankYou() {
+        thankYouMsg.classList.add('revealed');
+        spawnHearts();
+      }
+      clickMe.addEventListener('click', revealThankYou);
+      clickMe.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          revealThankYou();
+        }
+      });
+
+      giftLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        showView(viewGift);
+      });
+
+      // Handle back/forward: if URL hash is #gift, show gift view
+      function checkHash() {
+        if (window.location.hash === '#gift') {
+          showView(viewGift);
+        }
+      }
+      window.addEventListener('hashchange', checkHash);
+      checkHash();
+
+      // When you add a photo: set src="yourphoto.jpg" on #birthday-photo and put the file in this folder
+      var photo = document.getElementById('birthday-photo');
+      var photoBox = document.getElementById('photo-box');
+      var photoSrc = (photo.getAttribute('src') || '').trim();
+      if (photoSrc) {
+        photo.style.display = 'block';
+        photo.onload = function () { photoBox.classList.add('has-photo'); };
+      }
+    })();
+  </script>
+</body>
+</html>
