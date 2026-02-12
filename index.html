@@ -54,23 +54,35 @@
       position: fixed;
       width: 340px;
       height: 340px;
+      top: -400px;
+      animation: fallDown linear infinite;
+      z-index: 0;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      will-change: transform;
+      transform: translateZ(0);
+      contain: layout style paint;
+    }
+    .falling-photo-inner {
+      position: absolute;
+      inset: 0;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       border-radius: 14px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.12);
-      top: -380px;
-      animation: fallDown linear infinite;
-      z-index: 0;
       opacity: 0.96;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      will-change: transform;
-      transform: translateZ(0);
+      pointer-events: none;
+    }
+    .falling-photo-inner.back {
+      z-index: 0;
+    }
+    .falling-photo-inner.front {
+      z-index: 1;
     }
     @keyframes fallDown {
       from { transform: translateY(0) translateZ(0); }
-      to { transform: translateY(calc(100vh + 420px)) translateZ(0); }
+      to { transform: translateY(calc(100vh + 480px)) translateZ(0); }
     }
     .falling-photo[data-lane="0"] { left: 2%; }
     .falling-photo[data-lane="1"] { left: 50%; margin-left: -170px; }
@@ -79,14 +91,14 @@
       .falling-photo {
         width: min(340px, calc(33.33vw - 16px));
         height: min(340px, calc(33.33vw - 16px));
-        top: -120px;
+        top: -200px;
       }
       .falling-photo[data-lane="1"] { margin-left: calc(-0.5 * min(340px, 33.33vw - 16px)); }
       .falling-photo[data-lane="2"] { margin-left: calc(-1 * min(340px, 33.33vw - 16px)); }
     }
     @media (max-width: 768px) {
       .falling-photo {
-        top: -40px;
+        top: calc(-1 * min(340px, 35vw - 10px) - 24px);
         width: min(340px, calc(35vw - 10px));
         height: min(340px, calc(35vw - 10px));
         animation-duration: 20s !important;
@@ -355,26 +367,37 @@
         preload.src = photoUrls[j];
       }
       for (var i = 0; i < count; i++) {
-        var el = document.createElement('div');
-        el.className = 'falling-photo';
-        el.setAttribute('data-lane', laneIndex[i]);
-        el.setAttribute('data-delay-index', delayIndex[i]);
-        el.setAttribute('data-slot', i);
-        el.style.backgroundImage = "url('" + photoUrls[i % photoUrls.length] + "')";
-        el.style.animationDuration = duration + 's';
-        el.style.animationDelay = -(laneDelays[delayIndex[i]]) + 's';
-        el.addEventListener('animationiteration', function () {
+        var outer = document.createElement('div');
+        outer.className = 'falling-photo';
+        outer.setAttribute('data-lane', laneIndex[i]);
+        outer.setAttribute('data-delay-index', delayIndex[i]);
+        outer.setAttribute('data-slot', i);
+        outer.style.animationDuration = duration + 's';
+        outer.style.animationDelay = -(laneDelays[delayIndex[i]]) + 's';
+        var innerBack = document.createElement('div');
+        innerBack.className = 'falling-photo-inner back';
+        innerBack.style.backgroundImage = "url('" + photoUrls[i % photoUrls.length] + "')";
+        var innerFront = document.createElement('div');
+        innerFront.className = 'falling-photo-inner front';
+        innerFront.style.backgroundImage = "url('" + photoUrls[i % photoUrls.length] + "')";
+        outer.appendChild(innerBack);
+        outer.appendChild(innerFront);
+        outer.addEventListener('animationiteration', function () {
           var slot = parseInt(this.getAttribute('data-slot'), 10);
           slotImageIndex[slot] = (slotImageIndex[slot] + 15) % photoUrls.length;
           var newSrc = photoUrls[slotImageIndex[slot]];
-          var el = this;
+          var back = this.querySelector('.falling-photo-inner.back');
+          var front = this.querySelector('.falling-photo-inner.front');
+          if (!back || !front) return;
           requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              el.style.backgroundImage = "url('" + newSrc + "')";
-            });
+            back.style.backgroundImage = "url('" + newSrc + "')";
+            back.classList.remove('back');
+            back.classList.add('front');
+            front.classList.remove('front');
+            front.classList.add('back');
           });
         });
-        container.appendChild(el);
+        container.appendChild(outer);
       }
 
       function showView(view) {
