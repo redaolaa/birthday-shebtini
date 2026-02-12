@@ -2,35 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#ff6b9d">
-  <title>For Shebtini 🎂</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#8b0000">
+  <meta name="format-detection" content="telephone=no">
+  <title>For Shebtini 🥊</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-tap-highlight-color: transparent; }
+    html {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
     body {
       margin: 0;
       min-height: 100vh;
       min-height: 100dvh;
-      font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(160deg, #1a0a14 0%, #2d1b2e 40%, #1a0a14 100%);
+      min-height: 100svh;
+      min-height: -webkit-fill-available;
+      font-family: 'Oswald', sans-serif;
+      background: #0d0d0d;
       color: #fff;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      position: relative;
+    }
+
+    .bg-photos {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .bg-photos::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(13, 13, 13, 0.72) 0%, rgba(13, 13, 13, 0.65) 40%, rgba(26, 5, 5, 0.78) 100%),
+        linear-gradient(0deg, rgba(139, 0, 0, 0.08) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .falling-photo {
+      position: fixed;
+      width: 340px;
+      height: 340px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.12);
+      top: -380px;
+      animation: fallDown linear infinite;
+      z-index: 0;
+      opacity: 0.96;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    @keyframes fallDown {
+      from { transform: translateY(0); }
+      to { transform: translateY(calc(100vh + 420px)); }
+    }
+    .falling-photo[data-lane="0"] { left: 2%; }
+    .falling-photo[data-lane="1"] { left: 50%; margin-left: -170px; }
+    .falling-photo[data-lane="2"] { left: 100%; margin-left: -340px; }
+    @media (max-width: 1100px) {
+      .falling-photo {
+        width: min(340px, calc(33.33vw - 20px));
+        height: min(340px, calc(33.33vw - 20px));
+        top: -200px;
+      }
+      .falling-photo[data-lane="1"] { margin-left: calc(-0.5 * min(340px, 33.33vw - 20px)); }
+      .falling-photo[data-lane="2"] { margin-left: calc(-1 * min(340px, 33.33vw - 20px)); }
     }
 
     .view {
       display: none;
       min-height: 100vh;
       min-height: 100dvh;
+      min-height: 100svh;
       padding: 1.5rem;
       padding-bottom: 2rem;
       padding-top: max(1.5rem, env(safe-area-inset-top));
       padding-bottom: max(2rem, env(safe-area-inset-bottom));
+      padding-left: max(1.5rem, env(safe-area-inset-left));
+      padding-right: max(1.5rem, env(safe-area-inset-right));
+      position: relative;
+      z-index: 1;
     }
     .view.active {
       display: flex;
@@ -38,51 +103,77 @@
       align-items: center;
       justify-content: center;
       animation: fadeIn 0.5s ease;
+      position: relative;
+    }
+    .view.active::before {
+      content: '';
+      position: absolute;
+      inset: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      border: 2px solid rgba(139, 0, 0, 0.45);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.25);
+      pointer-events: none;
+    }
+    .view.active::after {
+      content: '';
+      position: absolute;
+      inset: max(20px, calc(env(safe-area-inset-top) + 8px)) max(20px, calc(env(safe-area-inset-right) + 8px)) max(20px, calc(env(safe-area-inset-bottom) + 8px)) max(20px, calc(env(safe-area-inset-left) + 8px));
+      border: 1px solid rgba(180, 180, 190, 0.15);
+      border-radius: 6px;
+      pointer-events: none;
     }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* ========== VIEW 1: Click here ========== */
     .click-here-btn {
-      font-family: 'Fredoka', sans-serif;
-      font-size: clamp(1.5rem, 6vw, 2.2rem);
-      font-weight: 600;
-      padding: 1.2rem 2.5rem;
-      border-radius: 2rem;
-      border: none;
-      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      padding: 1rem 2.2rem;
+      min-height: 44px;
+      min-width: 44px;
+      border-radius: 4px;
+      border: 3px solid #8b0000;
+      background: linear-gradient(180deg, #c41e3a 0%, #8b0000 50%, #5c0000 100%);
       color: #fff;
       cursor: pointer;
-      box-shadow: 0 8px 32px rgba(255, 107, 157, 0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 0 #3d0000, 0 8px 24px rgba(0,0,0,0.5), 0 0 20px rgba(212, 175, 55, 0.15);
+      transition: transform 0.15s, box-shadow 0.15s;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      z-index: 1;
     }
     .click-here-btn:hover, .click-here-btn:active {
-      transform: scale(1.05);
-      box-shadow: 0 12px 40px rgba(255, 107, 157, 0.5);
+      transform: translateY(2px);
+      box-shadow: 0 4px 0 #3d0000, 0 6px 20px rgba(0,0,0,0.5);
     }
     .hint {
       margin-top: 1.5rem;
-      font-size: 0.95rem;
-      opacity: 0.85;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 1;
     }
 
     /* ========== VIEW 2: Birthday page ========== */
     .birthday-title {
-      font-family: 'Fredoka', sans-serif;
+      font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(1.8rem, 8vw, 3rem);
-      font-weight: 600;
+      font-weight: 400;
+      letter-spacing: 0.04em;
       text-align: center;
-      margin: 0 0 1.5rem;
-      background: linear-gradient(90deg, #ffb347, #ff6b9d, #c44569);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: titleShine 3s ease-in-out infinite, popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin: 0 0 1rem;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(196, 30, 58, 0.5), 0 0 40px rgba(212, 175, 55, 0.2);
+      animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), titlePulse 2s ease-in-out infinite 0.8s;
+      position: relative;
+      z-index: 1;
     }
-    @keyframes titleShine {
-      0%, 100% { background-position: 0% center; }
-      50% { background-position: 100% center; }
+    @keyframes titlePulse {
+      0%, 100% { text-shadow: 0 0 20px rgba(196, 30, 58, 0.5), 0 0 40px rgba(212, 175, 55, 0.2); }
+      50% { text-shadow: 0 0 30px rgba(196, 30, 58, 0.8), 0 0 50px rgba(212, 175, 55, 0.35); }
     }
     @keyframes popIn {
       from { opacity: 0; transform: scale(0.8); }
@@ -91,89 +182,66 @@
     .click-me-box {
       display: inline-block;
       margin: 1rem 0 1.5rem;
-      padding: 1rem 1.8rem;
-      background: linear-gradient(135deg, rgba(255, 182, 71, 0.3), rgba(255, 107, 157, 0.3));
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      border-radius: 1.2rem;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 500;
+      padding: 0.9rem 1.6rem;
+      min-height: 44px;
+      min-width: 44px;
+      background: linear-gradient(180deg, rgba(196, 30, 58, 0.4) 0%, rgba(139, 0, 0, 0.5) 100%);
+      border: 2px solid #c41e3a;
+      box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.3);
+      border-radius: 4px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      z-index: 1;
     }
     .click-me-box:hover, .click-me-box:active {
-      transform: scale(1.08);
-      box-shadow: 0 0 24px rgba(255, 182, 71, 0.4);
-      border-color: rgba(255, 255, 255, 0.8);
+      transform: scale(1.05);
+      box-shadow: 0 0 24px rgba(196, 30, 58, 0.5), inset 0 0 0 1px rgba(212, 175, 55, 0.4);
     }
     .thank-you-msg {
-      font-size: clamp(1.1rem, 4vw, 1.4rem);
+      font-size: clamp(1rem, 3.5vw, 1.25rem);
       text-align: center;
-      max-width: 320px;
-      line-height: 1.5;
+      max-width: 380px;
+      line-height: 1.55;
       margin: 0 0 1.5rem;
       padding: 1rem;
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.5s ease, transform 0.5s ease;
+      position: relative;
+      z-index: 1;
     }
     .thank-you-msg.revealed {
       opacity: 1;
       transform: translateY(0);
     }
-    .photo-placeholder {
-      width: 100%;
-      max-width: 280px;
-      aspect-ratio: 1;
-      margin: 1rem auto;
-      background: rgba(255, 255, 255, 0.08);
-      border: 2px dashed rgba(255, 255, 255, 0.3);
-      border-radius: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .photo-placeholder img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .photo-placeholder span {
-      font-size: 0.9rem;
-      opacity: 0.6;
-    }
-    .photo-placeholder.has-photo span { display: none; }
-    .photo-placeholder.has-photo img { display: block !important; }
-
-    /* Floating hearts on "Click me" */
-    .heart {
-      position: fixed;
-      pointer-events: none;
-      font-size: 1.5rem;
-      animation: floatUp 1.2s ease-out forwards;
-      z-index: 100;
-    }
-    @keyframes floatUp {
-      from { opacity: 1; transform: translateY(0) scale(1); }
-      to { opacity: 0; transform: translateY(-80px) scale(1.2); }
-    }
     .gift-link {
       margin-top: 1.5rem;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.2rem;
-      color: #ffb347;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.06em;
+      color: #ff6b6b;
       text-decoration: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 1rem;
-      background: rgba(255, 179, 71, 0.2);
+      padding: 0.75rem 1.25rem;
+      min-height: 44px;
+      border-radius: 4px;
+      border: 2px solid rgba(196, 30, 58, 0.6);
+      background: rgba(139, 0, 0, 0.3);
       transition: transform 0.2s, background 0.2s;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .gift-link:hover, .gift-link:active {
       transform: scale(1.05);
-      background: rgba(255, 179, 71, 0.35);
+      background: rgba(196, 30, 58, 0.4);
     }
 
     /* ========== VIEW 3: Gift page ========== */
@@ -184,44 +252,88 @@
       line-height: 1.6;
       margin: 0;
       animation: fadeIn 0.6s ease;
+      position: relative;
+      z-index: 1;
     }
-    .gift-emoji {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      animation: bounce 1s ease infinite;
+    .gift-pdf-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1.25rem;
+      padding: 0.75rem 1.5rem;
+      min-height: 44px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      color: #fff;
+      background: linear-gradient(180deg, #c41e3a 0%, #8b0000 100%);
+      border: 2px solid rgba(212, 175, 55, 0.5);
+      border-radius: 4px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      z-index: 1;
     }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .gift-pdf-link:hover, .gift-pdf-link:active {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
     }
+
+    .music-toggle {
+      position: fixed;
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      right: max(1rem, env(safe-area-inset-right));
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      font-size: 1.25rem;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    .music-toggle:hover, .music-toggle:active {
+      background: rgba(139, 0, 0, 0.5);
+    }
+    .music-toggle.muted { opacity: 0.6; }
   </style>
 </head>
 <body>
+  <audio id="bg-music" loop preload="auto" playsinline>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+  <button type="button" class="music-toggle" id="music-toggle" aria-label="Toggle music" title="Music on/off">🔊</button>
+
+  <div class="bg-photos" id="bg-photos" aria-hidden="true"></div>
+
   <!-- VIEW 1: Click here to open -->
   <section id="view-start" class="view active">
     <button type="button" class="click-here-btn" id="btn-start">Click here</button>
-    <p class="hint">Something special awaits 🎂</p>
+    <p class="hint">Something special for the COOLEST friend ever 🥊🤩</p>
   </section>
 
   <!-- VIEW 2: Birthday message -->
   <section id="view-birthday" class="view">
     <h1 class="birthday-title">Happy Birthday Shebtini!</h1>
     <div class="click-me-box" id="click-me" role="button" tabindex="0">Click me</div>
-    <p class="thank-you-msg" id="thank-you-msg">Thank you for being an amazing friend</p>
-    <div class="photo-placeholder" id="photo-box">
-      <!-- To add a photo: put your image in this folder and set src below, e.g. src="photo.jpg" -->
-      <img id="birthday-photo" src="" alt="Photo for Shebtini" style="display: none;">
-      <span id="photo-placeholder-text">Add your photo here</span>
-    </div>
+    <p class="thank-you-msg" id="thank-you-msg">Happy Birthday to a truly one-of-a-kind person..the nicest, funniest, and most caring! Inshallah all your dreams come true and I hope you live life to the fullest. I have no doubt that you make life better for everyone lucky enough to know you. Keep being your amazing self! Inshallah hayatek is always filled with barakah, health, success, and happiness.</p>
     <a href="#gift" class="gift-link" id="gift-link">Click here for your gift 🎁</a>
   </section>
 
   <!-- VIEW 3: Gift -->
   <section id="view-gift" class="view">
-    <div class="gift-emoji">🦴</div>
     <p class="gift-message">
-      Since you aren't looking after your bones… I wanted to steal this opportunity and gift you this!
+      Since you're always too busy to treat yourself, i thought this would be a nice way for you to do something nice for yourself and a start to you looking after your self more!!
     </p>
+    <a href="Shebtini%20Gift%20Certificate.pdf" target="_blank" rel="noopener" class="gift-pdf-link">Open your gift certificate 🎁</a>
   </section>
 
   <script>
@@ -234,6 +346,49 @@
       var thankYouMsg = document.getElementById('thank-you-msg');
       var giftLink = document.getElementById('gift-link');
 
+      // Falling photos (small pictures dropping top to bottom)
+      var photoUrls = [
+        'assets/IMG_0773-0fb48b53-2ba8-4cb2-a92a-b8d69055383c.png',
+        'assets/IMG_0780-4f0aa56c-6c0c-49f5-87b1-2aeb127543b0.png',
+        'assets/IMG_0783-62f68cb1-ce11-4caf-987f-fa34e7428c79.png',
+        'assets/IMG_0778-4fd388fb-1770-4889-a4e4-9b49cc6338ea.png',
+        'assets/IMG_0774-d53fcf37-89b0-4139-ae02-849a6bb648e0.png',
+        'assets/01E43843-2EC5-436B-AE6F-0FBBA0544687-caf24353-cf47-4f6c-a996-c8516411dc4e.png',
+        'assets/IMG_0779-982f74a2-0865-4e13-8862-1ca9c1ed773f.png',
+        'assets/IMG_0781-5112a638-275a-434f-bc9b-9db89580a70b.png',
+        'assets/IMG_0782-d00bf593-281f-48a9-81bb-c68e8909f626.png',
+        'assets/29546DB6-35C4-4513-9481-43121945CC4F-db2c8e41-4466-4d4a-a40c-3b93310bc5ab.png',
+        'assets/IMG_0785-1b4fbb80-30b0-4157-a46c-4f70a9a9668c.png',
+        'assets/IMG_0784_2-a79ac5cd-7b97-408d-ba97-1b88f9f0f778.png',
+        'assets/IMG_0786-e3a4c888-ea66-4c72-bd4e-5d60b4b792f2.png',
+        'assets/IMG_0787-decde431-b4df-4c6a-871f-92b50f1ece9d.png',
+        'assets/IMG_0788-ef504643-96ba-44c3-8dca-a1bb2305dbea.png',
+        'assets/IMG_0790-1062b2b2-51a7-4271-9578-3330d7425714.png',
+        'assets/IMG_0792-16ca016c-bb35-422c-a7b7-bb6462470e82.png'
+      ];
+      var container = document.getElementById('bg-photos');
+      var duration = 28;
+      var count = 9;
+      var laneDelays = [0, 9.3, 18.6];
+      var laneIndex = [0, 0, 0, 1, 1, 1, 2, 2, 2];
+      var delayIndex = [0, 1, 2, 0, 1, 2, 0, 1, 2];
+      var slotImageIndex = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+      for (var i = 0; i < count; i++) {
+        var el = document.createElement('div');
+        el.className = 'falling-photo';
+        el.setAttribute('data-lane', laneIndex[i]);
+        el.setAttribute('data-slot', i);
+        el.style.backgroundImage = "url('" + photoUrls[i] + "')";
+        el.style.animationDuration = duration + 's';
+        el.style.animationDelay = -(laneDelays[delayIndex[i]]) + 's';
+        el.addEventListener('animationiteration', function () {
+          var slot = parseInt(this.getAttribute('data-slot'), 10);
+          slotImageIndex[slot] = (slotImageIndex[slot] + 9) % photoUrls.length;
+          this.style.backgroundImage = "url('" + photoUrls[slotImageIndex[slot]] + "')";
+        });
+        container.appendChild(el);
+      }
+
       function showView(view) {
         viewStart.classList.remove('active');
         viewBirthday.classList.remove('active');
@@ -241,29 +396,35 @@
         view.classList.add('active');
       }
 
-      btnStart.addEventListener('click', function () {
-        showView(viewBirthday);
-      });
-
-      function spawnHearts() {
-        var hearts = ['💖', '🌸', '✨', '💕'];
-        for (var i = 0; i < 8; i++) {
-          (function (j) {
-            setTimeout(function () {
-              var el = document.createElement('span');
-              el.className = 'heart';
-              el.textContent = hearts[j % hearts.length];
-              el.style.left = (30 + Math.random() * 40) + '%';
-              el.style.top = (40 + Math.random() * 20) + '%';
-              document.body.appendChild(el);
-              setTimeout(function () { el.remove(); }, 1300);
-            }, j * 80);
-          })(i);
+      var bgMusic = document.getElementById('bg-music');
+      var musicToggle = document.getElementById('music-toggle');
+      function startBgMusic() {
+        if (bgMusic && typeof bgMusic.play === 'function') {
+          bgMusic.play().catch(function () {});
         }
       }
+      function toggleMusic() {
+        if (!bgMusic) return;
+        if (bgMusic.paused) {
+          bgMusic.play().catch(function () {});
+          musicToggle.textContent = '🔊';
+          musicToggle.classList.remove('muted');
+          musicToggle.setAttribute('aria-label', 'Mute music');
+        } else {
+          bgMusic.pause();
+          musicToggle.textContent = '🔇';
+          musicToggle.classList.add('muted');
+          musicToggle.setAttribute('aria-label', 'Play music');
+        }
+      }
+      btnStart.addEventListener('click', function () {
+        startBgMusic();
+        showView(viewBirthday);
+      });
+      if (musicToggle) musicToggle.addEventListener('click', toggleMusic);
+
       function revealThankYou() {
         thankYouMsg.classList.add('revealed');
-        spawnHearts();
       }
       clickMe.addEventListener('click', revealThankYou);
       clickMe.addEventListener('keydown', function (e) {
@@ -287,14 +448,6 @@
       window.addEventListener('hashchange', checkHash);
       checkHash();
 
-      // When you add a photo: set src="yourphoto.jpg" on #birthday-photo and put the file in this folder
-      var photo = document.getElementById('birthday-photo');
-      var photoBox = document.getElementById('photo-box');
-      var photoSrc = (photo.getAttribute('src') || '').trim();
-      if (photoSrc) {
-        photo.style.display = 'block';
-        photo.onload = function () { photoBox.classList.add('has-photo'); };
-      }
     })();
   </script>
 </body>
