@@ -37,7 +37,7 @@
       position: fixed;
       inset: 0;
       z-index: -1;
-      overflow: hidden;
+      overflow: visible;
       pointer-events: none;
     }
     .bg-photos::after {
@@ -112,7 +112,7 @@
       .falling-photo[data-lane="2"] { margin-left: calc(-1 * min(340px, 35vw - 10px)) !important; }
       @keyframes fallDown {
         from { transform: translateY(0) translateZ(0); }
-        to { transform: translateY(calc(5 * (35vw - 10px))) translateZ(0); }
+        to { transform: translateY(calc(100vh + 5 * (35vw - 10px))) translateZ(0); }
       }
     }
 
