@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#8b0000">
+  <meta name="theme-color" content="#a67c5b">
   <meta name="format-detection" content="telephone=no">
   <title>For Shebtini 🥊</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -98,7 +98,7 @@
       .falling-photo[data-lane="2"] { margin-left: calc(-1 * min(340px, 35vw - 10px)) !important; }
       @keyframes fallDown {
         from { transform: translateY(0); }
-        to { transform: translateY(calc(100vh + 60px)); }
+        to { transform: translateY(calc(5 * (35vw - 10px))); }
       }
     }
 
@@ -135,20 +135,20 @@
       padding: 1rem 2.2rem;
       min-height: 44px;
       min-width: 44px;
-      border-radius: 4px;
-      border: 3px solid #8b0000;
-      background: linear-gradient(180deg, #c41e3a 0%, #8b0000 50%, #5c0000 100%);
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #e8a87c 0%, #c38d6a 50%, #a67c5b 100%);
       color: #fff;
       cursor: pointer;
-      box-shadow: 0 6px 0 #3d0000, 0 8px 24px rgba(0,0,0,0.5), 0 0 20px rgba(212, 175, 55, 0.15);
-      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
       position: relative;
       z-index: 1;
     }
     .click-here-btn:hover, .click-here-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 4px 0 #3d0000, 0 6px 20px rgba(0,0,0,0.5);
+      transform: scale(1.03);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
     }
     .hint {
       margin-top: 1.5rem;
@@ -187,22 +187,22 @@
       padding: 0.9rem 1.6rem;
       min-height: 44px;
       min-width: 44px;
-      background: linear-gradient(180deg, rgba(196, 30, 58, 0.4) 0%, rgba(139, 0, 0, 0.5) 100%);
-      border: 2px solid #c41e3a;
-      box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.3);
-      border-radius: 4px;
+      background: linear-gradient(135deg, rgba(232, 168, 124, 0.5) 0%, rgba(163, 124, 91, 0.6) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 999px;
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.4rem;
       letter-spacing: 0.06em;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
       position: relative;
       z-index: 1;
     }
     .click-me-box:hover, .click-me-box:active {
       transform: scale(1.05);
-      box-shadow: 0 0 24px rgba(196, 30, 58, 0.5), inset 0 0 0 1px rgba(212, 175, 55, 0.4);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
     }
     .thank-you-msg {
       font-size: clamp(1rem, 3.5vw, 1.25rem);
@@ -226,24 +226,25 @@
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.25rem;
       letter-spacing: 0.06em;
-      color: #ff6b6b;
+      color: #fff;
       text-decoration: none;
       padding: 0.75rem 1.25rem;
       min-height: 44px;
-      border-radius: 4px;
-      border: 2px solid rgba(196, 30, 58, 0.6);
-      background: rgba(139, 0, 0, 0.3);
-      transition: transform 0.2s, background 0.2s;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, rgba(232, 168, 124, 0.4) 0%, rgba(163, 124, 91, 0.5) 100%);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
       position: relative;
       z-index: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
     .gift-link:hover, .gift-link:active {
       transform: scale(1.05);
-      background: rgba(196, 30, 58, 0.4);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
     }
 
     /* ========== VIEW 3: Gift page ========== */
@@ -268,19 +269,19 @@
       font-size: 1.3rem;
       letter-spacing: 0.06em;
       color: #fff;
-      background: linear-gradient(180deg, #c41e3a 0%, #8b0000 100%);
-      border: 2px solid rgba(212, 175, 55, 0.5);
-      border-radius: 4px;
+      background: linear-gradient(135deg, #e8a87c 0%, #c38d6a 50%, #a67c5b 100%);
+      border: none;
+      border-radius: 999px;
       text-decoration: none;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
       position: relative;
       z-index: 1;
     }
     .gift-pdf-link:hover, .gift-pdf-link:active {
       transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
     }
 
   </style>
@@ -297,7 +298,7 @@
   <!-- VIEW 2: Birthday message -->
   <section id="view-birthday" class="view">
     <h1 class="birthday-title">Happy Birthday Shebtini!</h1>
-    <div class="click-me-box" id="click-me" role="button" tabindex="0">Click me</div>
+    <div class="click-me-box" id="click-me" role="button" tabindex="0">Click me first</div>
     <p class="thank-you-msg" id="thank-you-msg">Happy Birthday to a truly one-of-a-kind person..the nicest, funniest, and most caring! Inshallah all your dreams come true and I hope you live life to the fullest. I have no doubt that you make life better for everyone lucky enough to know you. Keep being your amazing self! Inshallah hayatek is always filled with barakah, health, success, and happiness.</p>
     <a href="#gift" class="gift-link" id="gift-link">Click here for your gift 🎁</a>
   </section>
