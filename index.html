@@ -65,10 +65,12 @@
       opacity: 0.96;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
+      will-change: transform;
+      transform: translateZ(0);
     }
     @keyframes fallDown {
-      from { transform: translateY(0); }
-      to { transform: translateY(calc(100vh + 420px)); }
+      from { transform: translateY(0) translateZ(0); }
+      to { transform: translateY(calc(100vh + 420px)) translateZ(0); }
     }
     .falling-photo[data-lane="0"] { left: 2%; }
     .falling-photo[data-lane="1"] { left: 50%; margin-left: -170px; }
@@ -97,8 +99,8 @@
       .falling-photo[data-lane="1"] { margin-left: calc(-0.5 * min(340px, 35vw - 10px)) !important; }
       .falling-photo[data-lane="2"] { margin-left: calc(-1 * min(340px, 35vw - 10px)) !important; }
       @keyframes fallDown {
-        from { transform: translateY(0); }
-        to { transform: translateY(calc(5 * (35vw - 10px))); }
+        from { transform: translateY(0) translateZ(0); }
+        to { transform: translateY(calc(5 * (35vw - 10px))) translateZ(0); }
       }
     }
 
@@ -127,12 +129,20 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* ========== VIEW 1: Click here ========== */
+    .hint {
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 1;
+    }
     .click-here-btn {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      font-size: clamp(1rem, 4vw, 1.35rem);
       font-weight: 400;
       letter-spacing: 0.08em;
-      padding: 1rem 2.2rem;
+      padding: 0.5rem 1.25rem;
       min-height: 44px;
       min-width: 44px;
       border-radius: 999px;
@@ -149,14 +159,6 @@
     .click-here-btn:hover, .click-here-btn:active {
       transform: scale(1.03);
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
-    }
-    .hint {
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      opacity: 0.8;
-      letter-spacing: 0.05em;
-      position: relative;
-      z-index: 1;
     }
 
     /* ========== VIEW 2: Birthday page ========== */
@@ -291,8 +293,8 @@
 
   <!-- VIEW 1: Click here to open -->
   <section id="view-start" class="view active">
-    <button type="button" class="click-here-btn" id="btn-start">Click here</button>
     <p class="hint">Something special for the COOLEST friend ever 🥊🤩</p>
+    <button type="button" class="click-here-btn" id="btn-start">Click here</button>
   </section>
 
   <!-- VIEW 2: Birthday message -->
@@ -348,6 +350,10 @@
       var laneIndex = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2];
       var delayIndex = [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4];
       var slotImageIndex = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+      for (var j = 0; j < photoUrls.length; j++) {
+        var preload = new Image();
+        preload.src = photoUrls[j];
+      }
       for (var i = 0; i < count; i++) {
         var el = document.createElement('div');
         el.className = 'falling-photo';
@@ -360,7 +366,13 @@
         el.addEventListener('animationiteration', function () {
           var slot = parseInt(this.getAttribute('data-slot'), 10);
           slotImageIndex[slot] = (slotImageIndex[slot] + 15) % photoUrls.length;
-          this.style.backgroundImage = "url('" + photoUrls[slotImageIndex[slot]] + "')";
+          var newSrc = photoUrls[slotImageIndex[slot]];
+          var el = this;
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              el.style.backgroundImage = "url('" + newSrc + "')";
+            });
+          });
         });
         container.appendChild(el);
       }
